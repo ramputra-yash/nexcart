@@ -195,13 +195,18 @@ module.exports.createOrder = async (req, res) => {
 }
 
 module.exports.success = async (req, res) => {
-    const { order_id } = req.query;
-    const order = await Payment.findOne({ orderId: order_id });
-    const user = await User.findOne({_id: req.cookies.user_id});
-    const cart = await Cart.findOneAndUpdate({ userId: req.cookies.user_id }, { $set: { products: [] } });
-    res.render('success', { order, user, cart });
-    order.status = 'PAID';
-    await order.save();
+    try {
+        const { order_id } = req.query;
+        const order = await Payment.findOne({ orderId: order_id });
+        const user = await User.findOne({_id: req.cookies.user_id});
+        const cart = await Cart.findOneAndUpdate({ userId: req.cookies.user_id }, { $set: { products: [] } });
+        res.render('success', { order, user, cart });
+        order.status = 'PAID';
+        await order.save();
+    } catch (err) {
+        console.log("Error in success callback", err.message);
+        res.status(500).send("Internal Server Error");
+    }
 }
 module.exports.failed = async (req, res) => {
     const { order_id } = req.query;

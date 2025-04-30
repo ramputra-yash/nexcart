@@ -39,7 +39,7 @@
                 <div class="relative w-full h-[auto] flex flex-col rounded-lg gap-2 bg-zinc-100/50" style="padding: 10px;">
                     <div class="w-full h-[auto] flex items-center gap-2">
                         <% payment.products.forEach((product) => { %>
-                            <img class="w-[50px] bg-white h-[50px] rounded-md object-cover" src="/images/uploads/<%= product.product.product_image %>" alt="">
+                            <img class="w-[50px] bg-white h-[50px] rounded-md object-cover" src="<%= product.product.product_image %>" alt="">
                         <% }) %>
                     </div>
                     <div class="w-full h-[auto] flex gap-3 flex-wrap">

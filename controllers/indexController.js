@@ -142,7 +142,7 @@ module.exports.createOrder = async (req, res) => {
          customer_name: user.name
        },
        order_meta: {
-        return_url: `http://localhost:3000/payment/success?order_id=${orderId}`
+        return_url: `https://nexcart-ybk1.onrender.com/payment/success?order_id=${orderId}`
       }
     };
 

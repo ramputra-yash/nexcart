@@ -1,5 +1,5 @@
 <a href="/product/<%= product._id %>" class="product_card w-[300px] h-[auto] bg-zinc-100/50" style="padding: 10px; border-radius: 10px;">
-    <img class="h-[300px] object-cover" style="border-radius: 5px;width: 100%;" src="/images/uploads/<%= product.product_image %>" alt="">
+    <img class="h-[300px] object-cover" style="border-radius: 5px;width: 100%;" src="<%= product.product_image %>" alt="">
     <div class="flex flex-col gap-2" style="padding: 10px;">
         <h1 class="text-xl font-bold w-full truncate"><%= product.product_name %></h1>
         <p class="text-sm text-zinc-500 w-full truncate"><%= product.product_description %></p>

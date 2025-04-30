@@ -1,6 +1,6 @@
 <div class="card_container w-[120px] h-[fit-content] bg-zinc-100/50 flex gap-2 flex-col rounded-lg" style="padding: 5px;">
     <a href="/product/<%= product._id %>">
-        <img class="w-[110px] h-[110px] rounded-lg object-cover" src="/images/uploads/<%= product.product_image %>" alt="">
+        <img class="w-[110px] h-[110px] rounded-lg object-cover" src="<%= product.product_image %>" alt="">
     </a>
     <div class="flex flex-col gap-2" style="padding: 0 5px;">
         <p class="text-xs truncate"><%= product.product_name %></p>

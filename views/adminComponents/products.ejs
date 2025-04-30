@@ -37,7 +37,7 @@
         <% } %>
         <% business.products.reverse().forEach((product) => { %>
             <form action="/admin/updateproduct/<%= product._id %>" method="post" class="product_container border-zinc-300 border-2 rounded-md flex gap-4" style="padding: 10px;">
-                <img class="w-[220px] object-cover h-[220px] rounded-md" src="/images/uploads/<%= product.product_image %>" alt="">
+                <img class="w-[220px] object-cover h-[220px] rounded-md" src="<%= product.product_image %>" alt="">
                 <div class="w-full flex flex-col items-end">
                     <div class="product_details_container flex w-full gap-4">
                         <div class="product_details w-1/2">

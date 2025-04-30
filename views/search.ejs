@@ -68,7 +68,7 @@
           filtered.forEach(product => {
             resultsDiv.innerHTML += `
               <a href="/product/${product._id}" class="search_page_products_item rounded-lg cursor-pointer hover:bg-zinc-100/50 transition-all duration-300 flex items-center gap-5" style="padding: 10px;">
-                <img class="w-[50px] h-[50px] object-cover rounded-lg" src="/images/uploads/${product.product_image}" alt="">
+                <img class="w-[50px] h-[50px] object-cover rounded-lg" src="${product.product_image}" alt="">
                 <div class="flex flex-col gap-1">
                   <h1 class="text-zinc-700 text-sm truncate max-w-[250px]">${product.product_name}</h1>
                   <p class="text-green-500 text-sm">₹${product.product_new_price}</p>

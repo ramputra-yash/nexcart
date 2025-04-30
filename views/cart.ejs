@@ -31,7 +31,7 @@
             <% cart.products.reverse().forEach(product => { %>
                 <div class="cart_item w-full bg-zinc-100/50 rounded-lg overflow-hidden flex gap-4 flex-wrap items-center justify-between" style="padding: 20px;">
                     <div class="flex items-center gap-4 w-[300px]">
-                        <img class="w-[70px] h-[70px] rounded-lg" src="/images/uploads/<%= product.productId.product_image %>" alt="">
+                        <img class="w-[70px] h-[70px] rounded-lg" src="<%= product.productId.product_image %>" alt="">
                         <div class="flex flex-col gap-2">
                             <h1 class="truncate w-[200px]"><%= product.productId.product_name %></h1>
                             <p class="text-zinc-500 text-sm truncate w-[200px]"><%= product.productId.product_description %></p>

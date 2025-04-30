@@ -49,7 +49,7 @@ module.exports.createProduct = async (req, res) => {
     let { product_name, product_description, product_old_price, product_new_price, product_image, category } = req.body;
     let business = await Business.findOne({ _id: req.cookies.business_id });
     let user = await User.findOne({ _id: business.createdBy });
-    let product = await Product.create({ product_name, product_description, product_old_price, product_new_price, product_image: req.file.filename, category, businessId: business._id });
+    let product = await Product.create({ product_name, product_description, product_old_price, product_new_price, product_image: req.file.path, category, businessId: business._id });
     
     business.products.push(product._id);
     await business.save();

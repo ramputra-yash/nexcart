@@ -1,0 +1,84 @@
+<%- include('partials/header') %>
+<style>
+    .search_page .back_btn {
+        display: none;
+    }
+    @media (max-width: 768px) {
+
+        .search_page .logo_link {
+            display: none;
+        }
+        .search_page .back_btn {
+            display: block;
+        }
+    }
+</style>
+<div class="search_page flex items-center gap-4 " style="padding: 20px;">
+    <a href="/" class="logo_link flex items-center gap-1">
+        <i class="ri-shopping-cart-2-fill text-green-500 text-2xl"></i>
+        <span class="font-bold text-zinc-700">Nexcart</span>
+    </a>
+    <a href="/" class="back_btn text-zinc-500 text-xl">
+        <i class="ri-arrow-left-line"></i>
+    </a>
+    <div class="border-2 border-zinc-300 w-full flex h-[50px] rounded-lg">
+        <i class="ri-search-line text-zinc-500 text-xl" style="padding: 8px 15px;"></i>
+        <input type="text" class="searchInput w-full outline-none" placeholder="Search for products">
+    </div>
+</div>
+<div class="search_page_products" style="padding: 10px 20px;">
+    
+</div>
+<script>
+    let allProducts = [];
+  
+    // Step 1: One-time fetch of all products
+    async function fetchAllProducts() {
+      try {
+        const res = await fetch('/allproducts');
+        const data = await res.json();
+        allProducts = data;
+  
+        console.log("Fetched products:", allProducts); // Now prints after fetch
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    }
+  
+    // Call fetch and setup listener only after data is fetched
+    fetchAllProducts().then(() => {
+      const searchInput = document.querySelector('.searchInput');
+      const resultsDiv = document.querySelector('.search_page_products');
+  
+      searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        resultsDiv.innerHTML = '';
+  
+        if (query === '') return;
+  
+        const filtered = allProducts.filter(product =>
+          product.product_name.toLowerCase().includes(query) ||
+          product.product_description.toLowerCase().includes(query) ||
+          product.product_new_price.toString().includes(query)
+        );
+  
+        if (filtered.length === 0) {
+          resultsDiv.innerHTML = '<p>No matching products found.</p>';
+        } else {
+          filtered.forEach(product => {
+            resultsDiv.innerHTML += `
+              <a href="/product/${product._id}" class="search_page_products_item rounded-lg cursor-pointer hover:bg-zinc-100/50 transition-all duration-300 flex items-center gap-5" style="padding: 10px;">
+                <img class="w-[50px] h-[50px] object-cover rounded-lg" src="/images/uploads/${product.product_image}" alt="">
+                <div class="flex flex-col gap-1">
+                  <h1 class="text-zinc-700 text-sm truncate max-w-[250px]">${product.product_name}</h1>
+                  <p class="text-green-500 text-sm">₹${product.product_new_price}</p>
+                </div>
+              </a>
+            `;
+          });
+        }
+      });
+    });
+  </script>
+  
+<%- include('partials/footer') %>

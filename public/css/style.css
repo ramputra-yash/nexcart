@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Mulish", sans-serif;
+    user-select: none;
+}
+html {
+    scroll-behavior: smooth;
+}
+body {
+    background: #dddddd;
+}
+body::-webkit-scrollbar{ 
+    background: #dddddd;
+    width: 10px;
+}
+body::-webkit-scrollbar-thumb{ 
+    background: #00C951;
+}
+#barba-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+#barba-wrapper::-webkit-scrollbar{ 
+    background: #dddddd;
+    width: 10px;
+}
+#barba-wrapper::-webkit-scrollbar-thumb{ 
+    background: #00C951;
+}
+
+
+@media (max-width: 1000px) {
+    #barba-wrapper::-webkit-scrollbar{ 
+        width: 0;
+    }
+    
+}
+

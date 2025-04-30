@@ -1,0 +1,76 @@
+
+<style>
+    textarea::-webkit-scrollbar {
+        display: none;
+    }
+    input, textarea {
+        color: #747474;
+    }
+    @media (max-width: 768px) {
+        
+        .product_container {
+            flex-direction: column;
+        }
+        .product_container img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+        .product_details_container {
+            flex-direction: column;
+        }
+        .product_details {
+            width: 100%;
+        }
+        .product_description {
+            width: 100%;
+        }
+    }
+</style>
+<div class="products_container h-full" style="display: none;">
+    <div class="products_header" style="padding: 10px 20px;">
+        <h1 class="text-2xl font-bold text-zinc-600">All Products</h1>
+    </div>
+    <div class="flex flex-col gap-4" style="padding: 20px;">
+        <% if(business.products.length < 1) { %>
+            <h1 class="text-2xl font-bold text-zinc-400">No products found</h1>
+        <% } %>
+        <% business.products.reverse().forEach((product) => { %>
+            <form action="/admin/updateproduct/<%= product._id %>" method="post" class="product_container border-zinc-300 border-2 rounded-md flex gap-4" style="padding: 10px;">
+                <img class="w-[220px] object-cover h-[220px] rounded-md" src="/images/uploads/<%= product.product_image %>" alt="">
+                <div class="w-full flex flex-col items-end">
+                    <div class="product_details_container flex w-full gap-4">
+                        <div class="product_details w-1/2">
+                            <div>
+                                <h1>Product Name</h1>
+                                <input type="text" name="product_name" value="<%= product.product_name %>" placeholder="Product Name" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                            </div>
+                            <div>
+                                <h1>Old Price</h1>
+                                <input type="text" name="product_old_price" value="<%= product.product_old_price %>" placeholder="Product Price" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                            </div>
+                            <div>
+                                <h1>New Price</h1>
+                                <input type="text" name="product_new_price" value="<%= product.product_new_price %>" placeholder="Product Price" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                            </div>
+                        </div>
+                        <div class="product_description w-1/2">
+                            <div>
+                                <h1>Product Description</h1>
+                                <textarea type="text" name="product_description" placeholder="Product Description" class="w-[100%] h-[150px] resize-none border-zinc-300 rounded-md md bg-zinc-100" style="outline: none;padding: 5px 10px;"><%= product.product_description %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="submit" class="bg-green-500 cursor-pointer hover:bg-green-600 text-white rounded-md" style="padding: 5px 10px;">
+                            <i class="ri-edit-fill"></i>
+                        </button>
+                        <a href="/admin/deleteproduct/<%= product._id %>" class="bg-red-500 cursor-pointer hover:bg-red-600 text-white rounded-md" style="padding: 5px 10px;">
+                            <i class="ri-delete-bin-6-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        <% }) %>
+    </div>
+</div>

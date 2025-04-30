@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<style>
+    .check-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+    }
+
+</style>
+<div class="text-center flex flex-col items-center justify-center w-full h-screen">
+    <div class="check-circle flex justify-center items-center">
+        <i class="ri-shield-check-fill text-green-500 text-9xl"></i>
+    </div>
+    <br>
+    <h1 class="text-3xl font-bold text-green-500">Payment Success</h1>
+    <br>
+    <p class="font-bold">Order ID: <span class="text-zinc-500"><%= order.orderId %></span></p>
+    <p class="font-bold">Order Amount: <span class="text-green-500"><%= order.orderAmount %></span></p>
+    <p class="font-bold">Currency: <span class="text-zinc-500"><%= order.currency %></span></p>
+    <p class="font-bold">Customer ID: <span class="text-zinc-500"><%= order.customerId %></span></p>
+    <p class="font-bold">Customer Name: <span class="text-zinc-500"><%= order.customerName %></span></p>
+    <p class="font-bold">Customer Email: <span class="text-zinc-500"><%= order.customerEmail %></span></p>
+    <br>
+    <a href="/myaccount" class="bg-green-500 text-white rounded-md" style="padding: 10px 20px;">Go to My Account</a>
+</div>
+<%- include('partials/footer') %>

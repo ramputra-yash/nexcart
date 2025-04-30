@@ -1,0 +1,148 @@
+<%- include('partials/header') %>
+<style>
+    @media (max-width: 780px) {
+        .form_container {
+            margin-top: 100px;
+        }
+    }
+</style>
+<div class="w-full h-screen">
+  <div
+    class="w-full h-[80px] flex items-center justify-between"
+    style="padding: 0 30px"
+  >
+    <a href="/" class="flex items-center gap-1">
+      <i class="ri-shopping-cart-2-fill text-green-500 text-2xl"></i>
+      <span class="font-bold text-zinc-600">Nexcart</span>
+    </a>
+  </div>
+  <div class="form_container w-full flex justify-center h-[auto]" style="margin-top: 50px">
+    <div
+      class="w-[600px] max-w-[90%] h-[auto] bg-zinc-100/50 rounded-lg flex flex-col"
+      style="padding: 20px"
+    >
+      <h1 class="text-zinc-600 font-bold text-2xl">Login Admin Account</h1>
+      <br />
+      <form id="myForm" action="/admin/login" method="post" class="flex flex-col gap-3" style="padding: 0 10px">
+        <div class="w-full flex flex-col gap-1">
+          <label for="email">Email</label>
+          <input
+            placeholder="example@gmail.com"
+            type="email"
+            name="email"
+            id="email"
+            class="w-full h-[40px] outline-green-500 border border-zinc-300 rounded-lg"
+            style="padding: 0 13px"
+          />
+          <span class="text-red-500 text-sm error"></span>
+        </div>
+        <div class="w-full relative flex flex-col gap-1">
+          <label for="password">Password</label>
+          <input
+            placeholder="********"
+            type="password"
+            name="password"
+            id="password"
+            class="w-full h-[40px] outline-green-500 border border-zinc-300 rounded-lg"
+            style="padding: 0 13px"
+          />
+          <span class="text-red-500 text-sm error"></span>
+          <span
+            class="absolute right-3 top-[38px] cursor-pointer"
+            id="togglePassword"
+            ><i class="ri-eye-fill"></i
+          ></span>
+        </div>
+        <button
+          type="submit"
+          class="w-full cursor-pointer h-[40px] bg-green-500 text-white rounded-lg"
+        >
+          Login Account
+        </button>
+        <span>
+            Don't have an account?
+            <a href="/admin/create" class="underline text-zinc-600 text-sm">Create Account</a>
+        </span>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('components/footer') %>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("myForm");
+
+    // Password show/hide logic
+    const togglePassword = document.getElementById("togglePassword");
+    const password = document.getElementById("password");
+    togglePassword.addEventListener("click", () => {
+      const type = password.type === "password" ? "text" : "password";
+      password.type = type;
+      togglePassword.innerHTML =
+        type === "password"
+          ? `<i class="ri-eye-fill"></i>`
+          : `<i class="ri-eye-off-fill"></i>`;
+    });
+
+    // Form validation
+    const fields = [
+      {
+        id: "email",
+        validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+        message: "Enter a valid email",
+      },
+      {
+        id: "password",
+        validate: (v) => v.length >= 6,
+        message: "Password must be at least 6 characters",
+      },
+    ];
+
+    fields.forEach(({ id, validate, message }) => {
+      const input = document.getElementById(id);
+      const errorSpan = input.parentElement.querySelector("span.error");
+
+      input.addEventListener("input", () => {
+        const value = input.value;
+        const isValid =
+          typeof validate === "function" ? validate(value) : validate();
+
+        if (!isValid) {
+          errorSpan.textContent = message;
+          input.style.borderColor = "red";
+        } else {
+          errorSpan.textContent = "";
+          input.style.borderColor = "#00C951"; // zinc-300
+          input.style.borderWidth = "1px";
+        }
+      });
+    });
+
+    // Optional: Submit pe final check (for safety)
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let isValid = true;
+
+      fields.forEach(({ id, validate, message }) => {
+        const input = document.getElementById(id);
+        const errorSpan = input.parentElement.querySelector("span.error");
+        const value = input.value;
+        const valid =
+          typeof validate === "function" ? validate(value) : validate();
+
+        if (!valid) {
+          errorSpan.textContent = message;
+          input.style.borderColor = "red";
+          isValid = false;
+        }
+      });
+
+      if (isValid) {
+        console.log("Form ready to submit!");
+        form.submit(); // uncomment if you want to actually submit
+      }
+    });
+  });
+</script>
+
+<%- include('partials/footer') %>

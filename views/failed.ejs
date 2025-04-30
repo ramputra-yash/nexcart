@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+<style>
+    .check-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+    }
+</style>
+<div class="text-center flex flex-col items-center justify-center w-full h-screen">
+    <div class="check-circle flex justify-center items-center">
+        <i class="ri-close-large-fill font-bold text-red-500 text-7xl"></i>
+    </div>
+    <br>
+    <h1 class="text-3xl font-bold text-red-500">Payment Failed</h1>
+    <br>
+    <a href="/cart" class="bg-red-500 text-white rounded-md" style="padding: 10px 20px;">Go to Cart</a>
+</div>
+<%- include('partials/footer') %>

@@ -1,0 +1,142 @@
+<%- include('partials/header') %>
+<style>
+    .dashboard_container .sidebar, .dashboard_container .dashboard_content {
+        transition: all 0.3s ease-in-out;
+    }
+    .dashboard_container.open .sidebar {
+        width: 0;
+    }
+    .dashboard_container.open .dashboard_content {
+        width: 100%;
+    }
+
+    .menu_items button.active {
+        background:#00C951;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard_container .sidebar {
+            width: 0;
+        }
+        .dashboard_container .dashboard_content {
+            width: 100%;
+        }
+        .dashboard_container .sidebar, .dashboard_container .dashboard_content {
+        transition: all 0.3s ease-in-out;
+        }
+        .dashboard_container.open .sidebar {
+            width: 250px;
+        }
+        .dashboard_container.open .dashboard_content {
+            width: calc(100% - 250px);
+        }
+    }
+</style>
+<div class="dashboard_container w-full flex h-screen">
+    <div class="sidebar overflow-hidden w-[250px] h-full relative bg-gray-100" style="border-right: 1px solid #e0e0e0;">
+        <a href="/" class="flex items-center gap-1" style="padding: 15px;">
+            <i class="ri-shopping-cart-2-fill text-green-500 text-2xl"></i>
+            <span class="font-bold text-zinc-600">Nexcart</span>
+        </a>
+        <div class="menu_items flex flex-col gap-1" style="padding-left: 0;padding-right: 10px;">
+            <button type="button" class="dashboard_btn cursor-pointer active hover:bg-green-500 w-full flex items-center gap-2 text-zinc-600 text-left hover:text-white" style="padding: 5px;padding-left:10px;transition:.3s;">
+                <i class="ri-dashboard-fill text-xl cursor-pointer"></i>
+                <span>Dashboard</span>
+            </button>
+            <button type="button" class="profile_btn cursor-pointer hover:bg-green-500 w-full flex items-center gap-2 text-zinc-600 text-left hover:text-white" style="padding: 5px;padding-left:10px;transition:.3s;">
+                <i class="ri-user-3-fill text-xl cursor-pointer"></i>
+                <span>Profile</span>
+            </button>
+            <button type="button" class="all_products_btn cursor-pointer hover:bg-green-500 w-full flex items-center gap-2 text-zinc-600 text-left hover:text-white" style="padding: 5px;padding-left:10px;transition:.3s;">
+                <i class="ri-product-hunt-fill text-xl cursor-pointer"></i>
+                <span>Products</span>
+            </button>
+            <button type="button" class="create_products_btn cursor-pointer hover:bg-green-500 w-full flex items-center gap-2 text-zinc-600 text-left hover:text-white" style="padding: 5px;padding-left:10px;transition:.3s;">
+                <i class="ri-add-circle-fill text-xl cursor-pointer"></i>
+                <span>Create</span>
+            </button>
+        </div>
+    </div>
+    <div class="dashboard_content w-[calc(100%-250px)] overflow-y-auto overflow-x-hidden bg-white h-full">
+        <nav class="w-full h-[50px] bg-gray-100 flex items-center justify-between" style="border-bottom: 1px solid #e0e0e0;padding: 0 15px;">
+            <p class="menuBtn">
+                <i class="ri-menu-unfold-2-line text-xl cursor-pointer"></i>
+            </p>
+            <div class="flex items-center gap-2">
+                <p class="text-zinc-600"><%= user.name %></p>
+                <img src="<%= user.profileImage %>" alt="profile" class="w-[30px] h-[30px] rounded-full">
+            </div>
+        </nav>
+        <div class="dashboard_data_container h-[auto] bg-white">
+            <%- include('adminComponents/dashboard', { business, user }) %>
+            <%- include('adminComponents/profile', { business, user }) %>
+            <%- include('adminComponents/createproduct', { business, user }) %>
+            <%- include('adminComponents/products', { business, user }) %>
+        </div>
+    </div>
+</div>
+<script>
+    const menuBtn = document.querySelector('.menuBtn');
+    menuBtn.addEventListener('click', () => {
+        const dashboardContainer = document.querySelector('.dashboard_container');
+        dashboardContainer.classList.toggle('open');
+        if(dashboardContainer.classList.contains('open')) {
+            menuBtn.innerHTML = '<i class="ri-menu-fold-2-line text-xl cursor-pointer"></i>';
+        } else {
+            menuBtn.innerHTML = '<i class="ri-menu-unfold-2-line text-xl cursor-pointer"></i>';
+        }
+    })
+
+    if(window.innerWidth < 768) {
+        document.querySelector('.dashboard_container').classList.remove('open');
+        menuBtn.innerHTML = '<i class="ri-menu-unfold-2-line text-xl cursor-pointer"></i>';
+    }
+
+    const menuItems = document.querySelectorAll('.menu_items button');
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove active class from all buttons first
+            menuItems.forEach(btn => btn.classList.remove('active'));
+            // Add active class only to clicked button
+            item.classList.add('active');
+        })
+    })
+
+
+    const dashboardBtn = document.querySelector('.dashboard_btn');
+    const profileBtn = document.querySelector('.profile_btn');
+    const allProductsBtn = document.querySelector('.all_products_btn');
+    const createProductsBtn = document.querySelector('.create_products_btn');
+
+    dashboardBtn.addEventListener('click', () => {
+        document.querySelector('.dashboard_data').style.display = 'block';
+        document.querySelector('.profile_data').style.display = 'none';
+        document.querySelector('.products_container').style.display = 'none';
+        document.querySelector('.create_product_container').style.display = 'none';
+    })
+
+    profileBtn.addEventListener('click', () => {
+        document.querySelector('.dashboard_data').style.display = 'none';
+        document.querySelector('.profile_data').style.display = 'block';
+        document.querySelector('.products_container').style.display = 'none';
+        document.querySelector('.create_product_container').style.display = 'none';
+    })
+
+    allProductsBtn.addEventListener('click', () => {
+        document.querySelector('.dashboard_data').style.display = 'none';
+        document.querySelector('.profile_data').style.display = 'none';
+        document.querySelector('.products_container').style.display = 'block';
+        document.querySelector('.create_product_container').style.display = 'none';
+    })
+    
+    createProductsBtn.addEventListener('click', () => {
+        document.querySelector('.dashboard_data').style.display = 'none';
+        document.querySelector('.profile_data').style.display = 'none';
+        document.querySelector('.products_container').style.display = 'none';
+        document.querySelector('.create_product_container').style.display = 'block';
+    })
+
+
+</script>
+<%- include('partials/footer') %>

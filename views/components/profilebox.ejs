@@ -1,0 +1,36 @@
+<div class="profileBox relative top-[100px] z-[50] right-[20px] rounded-lg shadow-lg h-[auto] w-[300px] bg-[#dddddd] flex flex-col" style="backdrop-filter: blur(10px);">
+    <div class="w-full flex items-center gap-4 border-b-2 border-zinc-300" style="padding: 20px;">
+        <img class="w-[65px] h-[65px] border-[5px] border-green-500 object-cover rounded-full" src="<%= user.profileImage %>" alt="">
+        <div class="flex flex-col">
+            <h1 class="text-zinc-700 font-bold"><%= user.name %></h1>
+            <p class="text-zinc-500 text-sm w-[160px] truncate"><%= user.email %></p>
+        </div>
+    </div>  
+    <div class="w-full flex flex-col" style="padding: 5px;">
+        <a href="/myaccount" class="flex items-center hover:bg-zinc-100/50 transition-all duration-300 border-l-[5px] border-[transparent] hover:border-green-500 gap-2" style="padding: 15px;">
+            <i class="ri-user-line"></i>
+            <span>My Account</span>
+        </a>
+        <a href="/myaccount" class="flex items-center hover:bg-zinc-100/50 transition-all duration-300 border-l-[5px] border-[transparent] hover:border-green-500 gap-2" style="padding: 15px;">
+            <i class="ri-instance-line"></i>
+            <span>My Orders</span>
+        </a>
+        <% if (!user.businessId || !isBusiness) { %>
+            <a href="/admin/create" class="flex items-center hover:bg-zinc-100/50 transition-all duration-300 border-l-[5px] border-[transparent] hover:border-green-500 gap-2" style="padding: 15px;">
+                <i class="ri-store-2-line"></i>
+                <span>Become a Seller</span>
+            </a>
+        <% } else { %>
+            <a href="/admin/dashboard" class="flex items-center hover:bg-zinc-100/50 transition-all duration-300 border-l-[5px] border-[transparent] hover:border-green-500 gap-2" style="padding: 15px;">
+                <i class="ri-store-2-line"></i>
+                <span>My Business</span>
+            </a>
+        <% } %>
+        <br><br>
+        <hr class="border-none outline-none h-[2px] bg-zinc-300">
+        <a href="/auth/logout" class="flex items-center hover:bg-zinc-100/50 transition-all duration-300 border-l-[5px] border-[transparent] hover:border-red-500 gap-2" style="padding: 15px;">
+            <i class="ri-logout-box-line"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>

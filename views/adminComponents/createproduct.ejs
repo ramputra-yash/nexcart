@@ -1,0 +1,80 @@
+<style>
+    @media (max-width: 768px) {
+        .upload_file_btn {
+            width: 100%;
+        }
+    }
+</style>
+<div class="create_product_container w-full h-full" style="display: none;">
+    <div class="create_product_header" style="padding: 10px 20px;">
+        <h1 class="text-2xl font-bold text-zinc-600">Create Products</h1>
+    </div>
+    <div class="create_product_body" style="padding: 20px;">
+        <form action="/admin/createproduct" method="post" enctype="multipart/form-data" class="product_container border-zinc-300 border-2 rounded-md flex gap-4" style="padding: 10px;">
+            <input type="file" name="product_image" id="product_image" class="hidden">
+            <div class="upload_file_btn w-[220px]  h-[220px] rounded-md bg-zinc-100 flex flex-col items-center justify-center gap-2">
+                <i class="ri-upload-cloud-2-line text-zinc-600 text-[60px]"></i>
+                <h1 class="text-zinc-600 text-sm">Upload Image</h1>
+            </div>
+            <div class="w-full flex flex-col items-end">
+                <div class="product_details_container flex w-full gap-4">
+                    <div class="product_details w-1/2">
+                        <div>
+                            <h1>Product Name</h1>
+                            <input type="text" name="product_name" placeholder="Product Name" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                        </div>
+                        <div>
+                            <h1>Old Price</h1>
+                            <input type="text" name="product_old_price" placeholder="Product Price" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                        </div>
+                        <div>
+                            <h1>New Price</h1>
+                            <input type="text" name="product_new_price" placeholder="Product Price" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                        </div>
+                    </div>
+                    <div class="product_description w-1/2">
+                        <div>
+                            <h1>Product Description</h1>
+                            <textarea type="text" name="product_description" placeholder="Product Description" class="w-[100%] h-[89px] resize-none border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;"></textarea>
+                        </div>
+                        <div>
+                            <h1>Category</h1>
+                            <select name="category" id="category" class="w-[100%] border-zinc-300 rounded-md bg-zinc-100" style="outline: none;padding: 5px 10px;">
+                                <option value="Clothes">Clothes</option>
+                                <option value="Shoes">Shoes</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Food">Food</option>
+                                <option value="Other" selected>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2" style="margin-top: 10px;">
+                    <button class="bg-green-500 cursor-pointer hover:bg-green-600 text-white rounded-md" style="padding: 5px 10px;">
+                        <i class="ri-add-fill"></i>
+                        Add Product
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const upload_file_btn = document.querySelector('.upload_file_btn');
+    const product_image = document.getElementById('product_image');
+    upload_file_btn.addEventListener('click', () => {
+        product_image.click();
+    });
+    product_image.addEventListener('change', () => {
+        const file = product_image.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                upload_file_btn.innerHTML = `<img src="${e.target.result}" alt="Product Image" class="w-[100%] h-[100%] object-cover rounded-md">`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+</script>

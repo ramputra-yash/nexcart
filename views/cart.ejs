@@ -1,0 +1,138 @@
+<%- include('partials/header') %>
+<style>
+    /* Remove arrows for Chrome, Safari, Edge */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Remove arrows for Firefox */
+    input[type="number"] {
+    -moz-appearance: textfield;
+    }
+    @media (max-width: 768px) {
+        .cart_container {
+            height: fit-content;
+        }
+        .cart_div {
+            flex-direction: column;
+        }
+        .cart_div .cart_left, .cart_div .cart_right {
+            width: 100%;
+        }
+    }
+</style>
+<%- include('components/navbar') %>
+<div class="cart_container overflow-x-hidden w-full relative" style="height: auto;">
+    <% if(cart.products.length > 0) { %>
+    <div class="cart_div w-full h-[auto] flex gap-4" style="padding: 20px;">
+        <div class="cart_left flex flex-col gap-4 w-1/2 h-[auto]" style="margin-bottom: 50px;">
+            <% cart.products.reverse().forEach(product => { %>
+                <div class="cart_item w-full bg-zinc-100/50 rounded-lg overflow-hidden flex gap-4 flex-wrap items-center justify-between" style="padding: 20px;">
+                    <div class="flex items-center gap-4 w-[300px]">
+                        <img class="w-[70px] h-[70px] rounded-lg" src="/images/uploads/<%= product.productId.product_image %>" alt="">
+                        <div class="flex flex-col gap-2">
+                            <h1 class="truncate w-[200px]"><%= product.productId.product_name %></h1>
+                            <p class="text-zinc-500 text-sm truncate w-[200px]"><%= product.productId.product_description %></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 justify-between">
+                        <h1 class="text-green-500 font-bold">₹<%= product.productId.product_new_price * product.quantity %></h1>
+                        <div class="product_id hidden">
+                            <%= product.productId._id %>
+                        </div>
+                        <div class="w-[fit-content] flex items-center bg-[#ddd] rounded-lg" data-product-id="<%= product.productId._id %>" style="padding: 5px;">
+                            <button class="decrease_quantity bg-red-500 text-white transition-all w-[30px] h-[30px] cursor-pointer rounded-lg">-</button>
+                            <span class="text-zinc-500 text-sm font-bold" style="padding: 0 10px;"><%= product.quantity %></span>
+                            <button class="increase_quantity bg-green-500 text-white transition-all w-[30px] h-[30px] cursor-pointer rounded-lg">+</button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+        <form action="/create-order" method="post" class="cart_right w-1/2 flex flex-col gap-4 h-full">
+            <div class="cart_right_div w-full h-[auto] bg-zinc-100/50 rounded-lg flex flex-col gap-0" style="padding: 20px;">
+                <% cart.products.forEach(product => { %>
+                    <div class="cart_right_div_item w-full h-[auto] rounded-lg flex flex-wrap items-center justify-between" style="padding: 10px 20px;">
+                        <h1 class="w-[140px] truncate"><%= product.productId.product_name %></h1>
+                        <h1>₹<%= product.productId.product_new_price * product.quantity %> <span class="text-zinc-500 text-sm"><%= product.quantity === 1 ? '' : 'x' + product.quantity %></span> </h1>
+                    </div> 
+                <% }) %>
+                <br>
+                <div class="cart_right_div_item w-full h-[auto] bg-zinc-100/50 rounded-lg flex flex-wrap items-center justify-between" style="padding: 10px 20px;">
+                    <h1 class="font-bold">Subtotal</h1>
+                    <h1 class="font-bold">₹<%= total_price %></h1>
+                    <input type="text" class="hidden" name="amount" value="<%= total_price %>">
+                </div>
+            </div>
+            <input type="number" required name="phone" class="w-full h-[50px] border border-green-500 rounded-lg" placeholder="Enter Phone Number" style="padding: 0 20px;">
+            <div class="w-full h-[auto] bg-zinc-100/50 rounded-lg flex flex-col gap-4">
+                <button type="submit" class="bg-green-500 cursor-pointer text-white transition-all w-full h-[50px] rounded-lg">
+                    Proceed to Pay ₹<%= total_price %>
+                </button>
+            </div>
+        </form>
+    </div>
+    <% } else { %>
+        <div class="cart_div relative mx-auto h-[550px] flex gap-4" style="padding: 20px;margin: auto;">
+            <%- include('components/emptyCart') %>
+        </div>
+    <% } %>
+
+</div>
+<script>
+   const increaseQuantity = document.querySelectorAll('.increase_quantity');
+const decreaseQuantity = document.querySelectorAll('.decrease_quantity');
+
+increaseQuantity.forEach(button => {
+    button.addEventListener('click', async () => {
+        const productId = button.parentElement.dataset.productId;  // Updated here
+
+        const response = await fetch('/cart/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productId: productId,  // Passing the correct productId
+                action: 'increase'
+            })
+        });
+        
+        const quantity = parseInt(button.previousElementSibling.textContent);
+        button.previousElementSibling.textContent = quantity + 1;
+        window.location.reload();
+    });
+});
+
+decreaseQuantity.forEach(button => {
+    button.addEventListener('click', async () => {
+        const productId = button.parentElement.dataset.productId;  // Updated here
+
+        const response = await fetch('/cart/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productId: productId,  // Passing the correct productId
+                action: 'decrease'
+            })
+        });
+        
+        let quantity = parseInt(button.nextElementSibling.textContent);
+        button.nextElementSibling.textContent = quantity - 1;
+
+        quantity -= 1;
+
+        if (quantity <= 0) {
+            button.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
+        }
+        window.location.reload();
+
+    });
+});
+</script>
+<%- include('components/footer') %>
+<%- include('partials/footer') %>

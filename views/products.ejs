@@ -1,0 +1,85 @@
+<%- include('partials/header') %>
+<style>
+    .products_div::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+<%- include('components/navbar') %>
+<div class="products_container w-full flex" style="height: calc(100vh - 80px);">
+    <div class="products_category border-r border-zinc-100/50 flex flex-col gap-2 w-[100px] overflow-y-auto" style="padding: 15px 10px;">
+        <a href="/products/Clothes" class="flex flex-col gap-2 items-center justify-center cursor-pointer">
+            <img class="w-[70px] h-[70px] object-cover rounded-lg" src="https://www.diadora.com/dw/image/v2/BBPK_PRD/on/demandware.static/-/Sites-diadora-master/default/dw9ae23936/images/hi-res/102.179375_45033_30_HR.jpg?sw=1920" alt="">
+            <p class="text-[8px] text-center">Clothes</p>
+        </a>
+        <a href="/products/Shoes" class="flex flex-col gap-2 items-center justify-center cursor-pointer">
+            <img class="w-[70px] h-[70px] object-cover rounded-lg" src="https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg" alt="">
+            <p class="text-[8px] text-center">Shoes</p>
+        </a>
+        <a href="/products/Accessories" class="flex flex-col gap-2 items-center justify-center cursor-pointer">
+            <img class="w-[70px] h-[70px] object-cover rounded-lg" src="https://images.squarespace-cdn.com/content/v1/54379dc9e4b02667fff75285/1611660052583-ZC13I565UXS5Y0Z8SYAL/works-of-art-bags-arms-and-legs-sculpture-fashion-still-life-photography-2B.jpg?format=2500w" alt="">
+            <p class="text-[8px] text-center">Accessories</p>
+        </a>
+        <a href="/products/Electronics" class="flex flex-col gap-2 items-center justify-center cursor-pointer">
+            <img class="w-[70px] h-[70px] object-cover rounded-lg" src="https://vasanthandco.in/UploadedFiles/productimages/20240920014158-713SsA7gftL._SX679_.jpg" alt="">
+            <p class="text-[8px] text-center">Electronics</p>
+        </a>
+        <a href="/products/Food" class="flex flex-col gap-2 items-center justify-center cursor-pointer">
+            <img class="w-[70px] h-[70px] object-cover rounded-lg" src="https://agricultureguruji.com/wp-content/uploads/2021/05/best-vegetable-grow-in-greenhouse-scaled.jpeg.webp" alt="">
+            <p class="text-[8px] text-center">Food</p>
+        </a>
+        <a href="/products/Other" class="flex flex-col gap-2 items-center justify-center cursor-pointer">
+            <img class="w-[70px] h-[70px] object-cover rounded-lg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzCkR-GLpe7JABqNA8kx-sPlwe9p7vCiJpaXD7H2Eyj4c4y1VVKGnd1VL8WE2dISGLA0Y&usqp=CAU" alt="">
+            <p class="text-[8px] text-center">Other</p>
+        </a>
+        
+    </div>
+    <div class="products_div flex flex-wrap gap-[10px] overflow-y-auto" style="width: calc(100% - 100px);padding: 10px;">
+        <% if (products.length > 0) { %>
+            <% products.forEach((product) => { %>
+                <%- include('components/card', { product }) %>
+            <% }) %>
+        <% } else { %>
+            <p class="text-zinc-500">No products found</p>
+        <% } %>
+    </div>
+</div>
+<script>
+
+    async function updateCartCount() {
+        const res = await fetch('/cart/count'); // 👈 Yahi fetch hai
+        const data = await res.json();
+        const cartCountElement = document.querySelector('.cart_count_button span');
+        console.log(data);
+        console.log(cartCountElement);
+        if (cartCountElement.classList.contains('hidden')) {
+            cartCountElement.classList.remove('hidden');
+            cartCountElement.textContent = data.count;
+        } else {
+            cartCountElement.textContent = data.count;
+        }
+    }
+
+    const addToCartButtonSmall = document.querySelectorAll(".add_to_cart_button_small");
+    addToCartButtonSmall.forEach(button => {
+        button.addEventListener("click", async () => {
+            const res = await fetch("/cart/addtocart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productId: button.dataset.productId }),
+            });
+            updateCartCount();
+            if (res.ok) {
+                button.innerHTML = `<i class="ri-check-line"></i>`;
+                updateCartCount();
+
+            } else {
+                button.innerHTML = `<i class="ri-shopping-cart-line"></i>`;
+                updateCartCount();
+            }
+        });
+    });
+</script>
+<%- include('components/footer') %>
+<%- include('partials/footer') %>

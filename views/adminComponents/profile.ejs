@@ -1,0 +1,47 @@
+<style>
+    @media (max-width: 768px) {
+        .profile_data_form {
+            width: 100%;
+        }
+    }
+</style>
+<div class="profile_data w-full h-full" style="display: none;">
+    <div class="profile_data_header flex flex-wrap items-center gap-4" style="padding: 30px;border-bottom: 1px solid #e0e0e0;">
+        <img class="w-[150px] object-cover h-[150px] rounded-full" src="<%= user.profileImage %>" alt="">
+        <div class="flex flex-col gap-2 text-xl">
+            <h1 class="text-3xl font-bold text-zinc-600 "><%= user.name %></h1>
+            <p class="text-zinc-400"><%= user.email %></p>
+            <div class="flex gap-2">
+                <button class="bg-blue-500 w-[fit-content] text-white flex gap-2 items-center text-sm rounded-md cursor-default" style="padding: 10px 20px;">
+                    <i class="ri-admin-fill"></i>
+                    Admin
+                </button>
+                <a href="/admin/logout" class="bg-red-500 w-[fit-content] text-white flex gap-2 items-center text-sm rounded-md cursor-pointer" style="padding: 10px 20px;">
+                    <i class="ri-logout-box-line"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    <form action="/admin/updateprofile" method="post" class="w-1/2 profile_data_form">
+        <h1 class="text-2xl font-bold text-zinc-600" style="padding: 10px 20px;">Your details</h1>
+        <div class="flex flex-col gap-4" style="padding: 10px 20px;">
+            <div class="flex flex-col gap-2">
+                <label for="name">Name</label>
+                <input type="text" value="<%= user.name %>" name="name" id="name" placeholder="Enter your name" class="pointer-events-none w-full border-2 border-zinc-300 rounded-md" style="outline: none;padding: 10px;cursor: not-allowed;">
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="email">Email</label>
+                <input type="email" value="<%= user.email %>" name="email" id="email" placeholder="Enter your email" class="pointer-events-none w-full border-2 border-zinc-300 rounded-md" style="outline: none;padding: 10px;cursor: not-allowed;">
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="business_name">Business Name</label>
+                <input type="text" value="<%= business.businessName %>" name="businessname" id="business_name" placeholder="Enter your business name" class="w-full border-2 border-zinc-300 rounded-md" style="outline: none;padding: 10px;">
+            </div>
+            <button type="submit" class="bg-green-500 w-full text-white flex justify-center gap-2 items-center text-sm rounded-md hover:bg-green-600 cursor-pointer" style="padding: 10px 20px;">
+                <i class="ri-save-line"></i>
+                Update Profile
+            </button>
+        </div>
+    </form>
+</div>

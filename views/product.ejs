@@ -1,0 +1,106 @@
+<%- include('partials/header') %>
+<style>
+    table tr td {
+        padding: 10px;
+    }
+    table tr td:first-child {
+        font-weight: bold;
+    }
+    table tr td:last-child {
+        font-weight: normal;
+        color: #64748b;
+    }
+    @media (max-width: 768px) {
+        .product_details {
+            flex-direction: column;
+        }
+        .product_details .product_images, .product_details .product_description {
+            width: 100%;
+        }
+    }
+    .related_products_container .card {
+        transform: scale(2);
+    }
+</style>
+<%- include('components/navbar') %>
+<div class="product_container w-full flex" style="height: fit-content;">
+    <div class="product_details w-full flex h-full">
+        <div class="product_images w-1/2 flex items-center justify-center gap-5 h-full " style="padding: 20px;">
+            <div class="flex flex-col gap-5">
+                <img class="w-[100px] object-cover hover:border-2 border-green-500 rounded-lg cursor-pointer" src="/images/uploads/<%= product.product_image %>" alt="">
+                <img class="w-[100px] object-cover hover:border-2 border-green-500 rounded-lg cursor-pointer" src="/images/uploads/<%= product.product_image %>" alt="">
+                <img class="w-[100px] object-cover hover:border-2 border-green-500 rounded-lg cursor-pointer" src="/images/uploads/<%= product.product_image %>" alt="">
+                <img class="w-[100px] object-cover hover:border-2 border-green-500 rounded-lg cursor-pointer" src="/images/uploads/<%= product.product_image %>" alt="">
+            </div>
+            <div>
+                <img class="w-[550px] object-cover rounded-lg" src="/images/uploads/<%= product.product_image %>" alt="">
+            </div>
+        </div>
+        <div class="product_description w-1/2 h-full" style="padding: 20px;">
+            <h1 class="text-2xl font-bold"><%= product.product_name %></h1>
+            <p class="text-zinc-500" style="padding: 10px 0;"><%= product.product_description %></p>
+            <hr class="border-none outline-none bg-zinc-300 w-full h-[2px]">
+            <div class="flex items-center gap-4 justify-between" style="padding: 20px 0;">
+                <div class="flex flex-col">
+                    <p class="oldprice text-zinc-500 line-through">₹ <%= product.product_old_price %></p>
+                    <p class="newprice text-3xl font-bold text-green-500">₹ <%= product.product_new_price %></p>
+                </div>
+                <%- include('components/addToCartButton') %>
+            </div>
+            <hr class="border-none outline-none bg-zinc-300 w-full h-[2px]">
+        </div>
+    </div>
+</div>
+<hr class="border-none outline-none bg-zinc-300 w-full h-[2px]">
+<br>
+<div class="related_products w-full flex flex-col h-[fit-content]">
+    <h1 class="w-full text-xl font-bold" style="padding: 5px 20px;">Related Products</h1>
+    <div class="related_products_container flex gap-5 w-full justify-center flex-wrap h-full" style="padding: 20px;">
+        <% if (products.length > 0) { %>
+            <% products.reverse().forEach((product) => { %>
+                <%- include('components/card', { product }) %>
+            <% }) %>
+        <% } else { %>
+            <p class="text-zinc-500">No related products found</p>
+        <% } %>
+    </div>
+</div>
+<script>
+        async function updateCartCount() {
+        const res = await fetch('/cart/count'); // 👈 Yahi fetch hai
+        const data = await res.json();
+        const cartCountElement = document.querySelector('.cart_count_button span');
+        console.log(data);
+        console.log(cartCountElement);
+        if (cartCountElement.classList.contains('hidden')) {
+            cartCountElement.classList.remove('hidden');
+            cartCountElement.textContent = data.count;
+        } else {
+            cartCountElement.textContent = data.count;
+        }
+    }
+
+    const addToCartButtonSmall = document.querySelectorAll(".add_to_cart_button_small");
+    addToCartButtonSmall.forEach(button => {
+        button.addEventListener("click", async () => {
+            const res = await fetch("/cart/addtocart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productId: button.dataset.productId }),
+            });
+            updateCartCount();
+            if (res.ok) {
+                button.innerHTML = `<i class="ri-check-line"></i>`;
+                updateCartCount();
+
+            } else {
+                button.innerHTML = `<i class="ri-shopping-cart-line"></i>`;
+                updateCartCount();
+            }
+        });
+    });
+</script>
+<%- include('components/footer') %>
+<%- include('partials/footer') %>

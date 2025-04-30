@@ -1,0 +1,127 @@
+<style>
+  .add_to_cart_button .ri-shopping-cart-2-fill {
+    position: absolute;
+    top: 50%;
+    left: -20%;
+    transform: translate(-50%, -50%);
+  }
+  .add_to_cart_button .ri-box-3-fill {
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .ri-shopping-cart-2-fill.active {
+    animation: riShoppingCart2Fill 2s ease-in-out 1;
+  }
+  .add_to_cart_button.active button {
+    color: transparent;
+  }
+  @keyframes riShoppingCart2Fill {
+    0% {
+      left: -20%;
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    50% {
+      left: 50%;
+      opacity: 1;
+      transform: translate(-50%, -50%) rotate(10deg);
+    }
+    100% {
+      left: 110%;
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(-10deg);
+    }
+  }
+  .ri-box-3-fill.active {
+    animation: riBox3Fill 1s ease-in-out 1;
+    animation-delay: 0.5s;
+  }
+  @keyframes riBox3Fill {
+    0% {
+      top: -30%;
+    }
+    50% {
+      top: 40%;
+      opacity: 1;
+    }
+    55% {
+      color: transparent;
+    }
+    100% {
+      color: transparent;
+      top: 50%;
+      opacity: 0;
+    }
+  }
+</style>
+<div class="add_to_cart_button overflow-hidden relative text-white">
+  <i class="ri-shopping-cart-2-fill text-2xl"></i>
+  <i class="ri-box-3-fill text-[15px]"></i>
+  <button
+    class="bg-green-500 text-white text-sm rounded-md cursor-pointer"
+    style="padding: 10px 20px"
+  >
+    ADD TO CART
+  </button>
+</div>
+<script>
+  const addToCartButton = document.querySelector(".add_to_cart_button");
+  const riShoppingCart2Fill = document.querySelector(
+    ".add_to_cart_button .ri-shopping-cart-2-fill"
+  );
+  const riBox3Fill = document.querySelector(
+    ".add_to_cart_button .ri-box-3-fill"
+  );
+  const cartButton = document.querySelector(".add_to_cart_button button");
+
+
+  async function updateCartCount() {
+    const res = await fetch('/cart/count'); // 👈 Yahi fetch hai
+    const data = await res.json();
+
+    const cartCountElement = document.querySelector('.cart_count_button span');
+    if (cartCountElement.classList.contains('hidden')) {
+            cartCountElement.classList.remove('hidden');
+            cartCountElement.textContent = data.count;
+        } else {
+            cartCountElement.textContent = data.count;
+        }
+  }
+
+  addToCartButton.addEventListener("click", async () => {
+    try {
+      const res = await fetch("/cart/addtocart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // ✅ ESSENTIAL
+        },
+        body: JSON.stringify({
+          productId: "<%= product._id %>",
+        }),
+      });
+      console.log(res);
+      if (res.ok) {
+        cartButton.innerHTML = "ADDED";
+        console.log("added");
+        updateCartCount();
+      } else {
+        cartButton.innerHTML = "ADD TO CART";
+      }
+    } catch (error) {
+      console.error(error);
+      cartButton.innerHTML = "ADD TO CART";
+    }
+
+    addToCartButton.classList.add("active");
+    riShoppingCart2Fill.classList.add("active");
+    riBox3Fill.classList.add("active");
+    setTimeout(() => {
+      addToCartButton.classList.remove("active");
+      riShoppingCart2Fill.classList.remove("active");
+      riBox3Fill.classList.remove("active");
+      document.querySelector(".add_to_cart_button button").innerHTML = "ADDED";
+    }, 2000);
+  });
+</script>
